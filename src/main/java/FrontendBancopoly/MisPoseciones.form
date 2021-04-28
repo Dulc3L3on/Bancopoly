@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="441" max="32767" attributes="0"/>
+              <Component id="jScrollPane4" min="-2" pref="184" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="574" max="32767" attributes="0"/>
+              <Component id="jScrollPane4" min="-2" pref="72" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="jTextArea1">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="text" type="java.lang.String" value="La opci&#xf3;n de hipotecar se habilitar&#xe1; &#xa;en el momento que se quede sin &#xa;propiedades en dicho lugar, lo cual se&#xa;representar&#xe1; al desactivar la opci&#xf3;n &#xa;de vender y con ello activar la de&#xa; hipotecar&#xa;&#xa;RECUERDA, en los listados solamente&#xa;aparecer&#xe1;n las propiedades que a &#xe9;l &#xa;le correspondan, lo cual se har&#xe1; acce&#xa;diendo al listado del objeto propieda&#xa;des del jugador con esto quiero decir &#xa;que al comprar lo que se le pasar&#xe1; ser&#xe1; solamente&#xa;el objetopropiedad del grupo corresp&#xa;NO la renta al valor de ella se accede&#xa;r&#xe1; directamente desde el m&#xe9;todo res&#xa;pectivo para &quot;obtener&quot; el pago, lo&#xa;cual se encuentra en la hija respectiv&#xa;a de la clase de &quot;casillas&quot;, es decir que&#xa;NO SE LE PASAR&#xc1;N VALORES, SINO&#xa;LOS OBJETOS EN S&#xcd;, para acceder a&#xa;sus respectivos miembros&#xa;&#xa;por ello al comprar casas se ir&#xe1; direct&#xa;al arr de edificaciones simples de la &#xa;hija del grupo de la propiedad respec&#xa;tiva&#xa;&#xa;Los grupos de las propiedades que se&#xa;tomar&#xe1;n en cta para formar las hijas&#xa;solo son los establecidos por las&#xa;especificaciones del juego, no los&#xa;grupos que se creen por el jugador&#xa;estos ser&#xe1;n solo una nueva refer&#xa;al grupo general donde en una var&#xa;se le indicar&#xe1; el nombre que el jug&#xa;le halla asignado,( mira tu cuaderno)&#xa;el tama&#xf1;o del arreglo se definir&#xe1; &#xa;seg&#xfa;n el # de grupos totales de cada &#xa;propiedad que halla creado el jug&#xa;es decir que se har&#xe1; hasta el final de&#xa;la customizaci&#xf3;n del mapa, lo que si&#xa;ya estar&#xe1; creado al crear el mapa&#xa;ser&#xe1; el arreglo que contiene todas&#xa;las casillas que son &#xfa;tiles para la crea&#xa;ci&#xf3;n y edici&#xf3;n de dicho mapa, cuando &#xa;presione jugar se crear&#xe1; el arreglo &#xa;de propiedad correspondiente, &#xa;seg&#xfa;n lo especificado, esto podr&#xe1;&#xa;hacerse al acceder al tama&#xf1;o de la &#xa;lista y a los elementos de ella."/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

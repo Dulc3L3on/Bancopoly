@@ -1,0 +1,855 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package FrontendBancopoly;
+
+import BackendBancopoly.ListaEnlazada;
+import BackendBancopoly.Nodo;
+import BackendBancopoly.Temporizador;
+import BackendBancopoly.Ranking;
+import BackendBancopoly.Reloj;
+import FrontendBancopoly.MenuDecisionFinal;
+import Jugadores.Jugador;
+import Partida.DesarrolloPartida;
+import RegistroYManejoTemporalDatos.ManejadorDeArchivos;
+import java.awt.Font;
+import javax.swing.*;
+
+/**
+ *
+ * @author phily
+ */
+public class Tablero extends javax.swing.JFrame /*implements Serializable*/{//vamos a ver si debo app el trascient a esa linea de la tarjeta donde se menciona al tablero (es porque se quiere actualizar la tabla de posiciones... si no veremos de que manera se puede quitar esa línea de ahí... todo esto si es que se genera error alguno a la hora de guardar y abrir
+    private DesarrolloPartida partida;
+    private static JPanel paneles[];
+    public static JLabel labelesTiempo[]= new JLabel[3];
+    public static JButton botonesEnPartida[] = new JButton[5];
+    private ListaEnlazada<JPanel> listaCasillasFisicas = new ListaEnlazada();
+    private ManejadorDeArchivos archivador = new ManejadorDeArchivos();
+    private int numeroTotalCasillas;
+    
+    private int sumaDados;
+    private int igualdades;       
+    
+    public static Tablero referenciaTablero;
+    
+    TurnoDe dialogoDeTurno = new TurnoDe(new javax.swing.JFrame(), true);
+    public static Dados dialogoLanzaDados = new Dados(new javax.swing.JFrame(), true);//para que una sola vez sea creado, y ese mismo diálog sea empleado en todas partes
+    MIsPoseciones dialogoMisPoseciones = new MIsPoseciones(new javax.swing.JFrame(), true);
+    informativo dialogoInformativo = new informativo(new javax.swing.JFrame(), true);
+    ElGanador dialogoFelicitaciones = new ElGanador(new javax.swing.JFrame(), true);
+    MenuDecisionFinal menuFinal = new MenuDecisionFinal(new javax.swing.JFrame(), true);
+    
+    Temporizador temporizador;
+    Reloj reloj;
+    
+    /**
+     * Creates new form Tablero
+     * @param jugadoresEnPartida
+     * @param casillasFisicas
+     * @param estadoPartidaComenzada
+     */
+    public Tablero(Jugador jugadoresEnPartida[], ListaEnlazada<JPanel> casillasFisicas, int estadoPartidaComenzada){
+        initComponents();       
+        
+        //this.getContentPane().setBackground(Color.DARK_GRAY);
+        labelesTiempo[0]= lbl_hrs;
+        labelesTiempo[1]= lbl_mins;
+        labelesTiempo[2]= lbl_segs;
+        
+        crearInstanciaDeTiempoSolicitada();
+        
+        botonesEnPartida[0]=btn_Dados;
+        botonesEnPartida[1]=btn_MIsPoseciones;
+        botonesEnPartida[2]=btn_TerminarTurno;
+        botonesEnPartida[3]=btn_Quiebra;
+        botonesEnPartida[4]=btn_yaPague;
+        
+        
+        partida= new DesarrolloPartida(jugadoresEnPartida, estadoPartidaComenzada);
+        dialogoLanzaDados.recibirDesarrolloPartida(partida);//aquí ya va con todo y jugadores
+        dialogoMisPoseciones.recibirJugadores( this);//pues debe ser en el mismo orden, sino habrá discrepancia con los turnos y jugador mostrado    por eso no tendrían que ser los que en registro se encuentran?
+        dialogoMisPoseciones.recibirTurnoActual(partida.obtenerTurnoActual()-1);//está aquí por el hecho de ser el primer turno xD
+        asignarJugadoresATablaDeTurnos(/*partida.enviarJugadores(),*/jugadoresEnPartida.length);
+        listaCasillasFisicas=casillasFisicas;
+        dialogoInformativo.cargarJugadores();
+        agregarCasillasDeListaAContenedor();       
+        
+        if(estadoPartidaComenzada==2){//1-> el botón no estaba presionado y era el primer turno... 2-> el botón de dados estaba presionado al guardar... 3-> el botón de dados estaba sin presionar y no era el primer turno
+            btn_Dados.setText("Dados");
+            btn_Dados.setEnabled(false);            
+            btn_MIsPoseciones.setEnabled(true);
+            btn_Quiebra.setEnabled(false);//es que no me parece correcto que se active
+            btn_TerminarTurno.setEnabled(true);      
+            empezarTiempoSolicitado();
+        }
+        
+        if(estadoPartidaComenzada==3){
+            btn_Dados.setText("Dados");
+            btn_Dados.setEnabled(true);            
+            btn_MIsPoseciones.setEnabled(true);
+            btn_Quiebra.setEnabled(false);//es que no me parece correcto que se active
+            btn_TerminarTurno.setEnabled(false); 
+            empezarTiempoSolicitado();
+        }
+        
+        referenciaTablero=this;
+        
+        
+        //Se activa el reloj
+        //se muestra el diálogo de la persona con su respectivo turno       
+        
+    }
+    
+    
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jMenuItem3 = new javax.swing.JMenuItem();
+        JP_Jugadores = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btn_MIsPoseciones = new javax.swing.JButton();
+        JPn_jugador3 = new javax.swing.JPanel();
+        JPn_jugador4 = new javax.swing.JPanel();
+        JPn_jugador5 = new javax.swing.JPanel();
+        JPn_jugador6 = new javax.swing.JPanel();
+        btn_Quiebra = new javax.swing.JButton();
+        btn_yaPague = new javax.swing.JButton();
+        JP_Tablero = new javax.swing.JPanel();
+        Dados_JP = new javax.swing.JPanel();
+        btn_TerminarTurno = new javax.swing.JButton();
+        Turno_JP = new javax.swing.JPanel();
+        btn_Dados = new javax.swing.JButton();
+        JP_Tiempo = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        lbl_mins = new javax.swing.JLabel();
+        lbl_segs = new javax.swing.JLabel();
+        lbl_hrs = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        Jmn_terminarJuego = new javax.swing.JMenu();
+        mnItem_salirYGuardar = new javax.swing.JMenuItem();
+        mnItem_salirSinGuardar = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menu_informativo = new javax.swing.JMenu();
+
+        jMenuItem3.setText("jMenuItem3");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("MisteriusPoly");
+        setBackground(new java.awt.Color(215, 169, 123));
+        setExtendedState(6);
+        setResizable(false);
+        setSize(new java.awt.Dimension(2147483647, 2147483647));
+
+        JP_Jugadores.setBackground(new java.awt.Color(188, 209, 213));
+        JP_Jugadores.setPreferredSize(new java.awt.Dimension(485, 657));
+
+        jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(93, 81, 81));
+        jLabel1.setText("<<JUGADORES>>");
+
+        btn_MIsPoseciones.setBackground(new java.awt.Color(237, 232, 227));
+        btn_MIsPoseciones.setText("Mis Poseciones");
+        btn_MIsPoseciones.setEnabled(false);
+        btn_MIsPoseciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_MIsPosecionesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout JPn_jugador3Layout = new javax.swing.GroupLayout(JPn_jugador3);
+        JPn_jugador3.setLayout(JPn_jugador3Layout);
+        JPn_jugador3Layout.setHorizontalGroup(
+            JPn_jugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        JPn_jugador3Layout.setVerticalGroup(
+            JPn_jugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 57, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout JPn_jugador4Layout = new javax.swing.GroupLayout(JPn_jugador4);
+        JPn_jugador4.setLayout(JPn_jugador4Layout);
+        JPn_jugador4Layout.setHorizontalGroup(
+            JPn_jugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        JPn_jugador4Layout.setVerticalGroup(
+            JPn_jugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 57, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout JPn_jugador5Layout = new javax.swing.GroupLayout(JPn_jugador5);
+        JPn_jugador5.setLayout(JPn_jugador5Layout);
+        JPn_jugador5Layout.setHorizontalGroup(
+            JPn_jugador5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        JPn_jugador5Layout.setVerticalGroup(
+            JPn_jugador5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 58, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout JPn_jugador6Layout = new javax.swing.GroupLayout(JPn_jugador6);
+        JPn_jugador6.setLayout(JPn_jugador6Layout);
+        JPn_jugador6Layout.setHorizontalGroup(
+            JPn_jugador6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        JPn_jugador6Layout.setVerticalGroup(
+            JPn_jugador6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 59, Short.MAX_VALUE)
+        );
+
+        btn_Quiebra.setBackground(new java.awt.Color(237, 232, 227));
+        btn_Quiebra.setText("He quebrado!");
+        btn_Quiebra.setEnabled(false);
+        btn_Quiebra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_QuiebraActionPerformed(evt);
+            }
+        });
+
+        btn_yaPague.setBackground(new java.awt.Color(237, 232, 227));
+        btn_yaPague.setText("Ya pague!");
+        btn_yaPague.setEnabled(false);
+        btn_yaPague.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_yaPagueActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout JP_JugadoresLayout = new javax.swing.GroupLayout(JP_Jugadores);
+        JP_Jugadores.setLayout(JP_JugadoresLayout);
+        JP_JugadoresLayout.setHorizontalGroup(
+            JP_JugadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JP_JugadoresLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(JP_JugadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JPn_jugador6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JPn_jugador5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JPn_jugador4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JPn_jugador3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(131, 131, 131))
+            .addGroup(JP_JugadoresLayout.createSequentialGroup()
+                .addGroup(JP_JugadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JP_JugadoresLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btn_MIsPoseciones)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_Quiebra, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(btn_yaPague, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JP_JugadoresLayout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        JP_JugadoresLayout.setVerticalGroup(
+            JP_JugadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JP_JugadoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(210, 210, 210)
+                .addComponent(JPn_jugador3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(JPn_jugador4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(JPn_jugador5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(JPn_jugador6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addGroup(JP_JugadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_MIsPoseciones, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_Quiebra, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_yaPague, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        JP_Tablero.setBackground(new java.awt.Color(219, 213, 203));
+
+        javax.swing.GroupLayout JP_TableroLayout = new javax.swing.GroupLayout(JP_Tablero);
+        JP_Tablero.setLayout(JP_TableroLayout);
+        JP_TableroLayout.setHorizontalGroup(
+            JP_TableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1185, Short.MAX_VALUE)
+        );
+        JP_TableroLayout.setVerticalGroup(
+            JP_TableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 839, Short.MAX_VALUE)
+        );
+
+        Dados_JP.setBackground(new java.awt.Color(227, 194, 147));
+
+        btn_TerminarTurno.setBackground(new java.awt.Color(237, 232, 227));
+        btn_TerminarTurno.setFont(new java.awt.Font("Sawasdee", 0, 15)); // NOI18N
+        btn_TerminarTurno.setText("Terminar Turno");
+        btn_TerminarTurno.setEnabled(false);
+        btn_TerminarTurno.setOpaque(true);
+        btn_TerminarTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TerminarTurnoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout Dados_JPLayout = new javax.swing.GroupLayout(Dados_JP);
+        Dados_JP.setLayout(Dados_JPLayout);
+        Dados_JPLayout.setHorizontalGroup(
+            Dados_JPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Dados_JPLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_TerminarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        Dados_JPLayout.setVerticalGroup(
+            Dados_JPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Dados_JPLayout.createSequentialGroup()
+                .addComponent(btn_TerminarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        Turno_JP.setBackground(new java.awt.Color(153, 145, 137));
+
+        btn_Dados.setBackground(new java.awt.Color(237, 232, 227));
+        btn_Dados.setFont(new java.awt.Font("Sawasdee", 0, 15)); // NOI18N
+        btn_Dados.setText("Empezar partida");
+        btn_Dados.setOpaque(true);
+        btn_Dados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_DadosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout Turno_JPLayout = new javax.swing.GroupLayout(Turno_JP);
+        Turno_JP.setLayout(Turno_JPLayout);
+        Turno_JPLayout.setHorizontalGroup(
+            Turno_JPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Turno_JPLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_Dados, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        Turno_JPLayout.setVerticalGroup(
+            Turno_JPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btn_Dados, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+        );
+
+        JP_Tiempo.setBackground(new java.awt.Color(242, 227, 184));
+
+        jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 17)); // NOI18N
+        jLabel2.setText("Tiempo:");
+
+        lbl_mins.setFont(new java.awt.Font("Sawasdee", 1, 36)); // NOI18N
+        lbl_mins.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lbl_segs.setFont(new java.awt.Font("Sawasdee", 1, 36)); // NOI18N
+        lbl_segs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lbl_hrs.setFont(new java.awt.Font("Sawasdee", 1, 36)); // NOI18N
+        lbl_hrs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jLabel3.setFont(new java.awt.Font("Sawasdee", 1, 15)); // NOI18N
+        jLabel3.setText(":");
+
+        jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 15)); // NOI18N
+        jLabel4.setText(":");
+
+        javax.swing.GroupLayout JP_TiempoLayout = new javax.swing.GroupLayout(JP_Tiempo);
+        JP_Tiempo.setLayout(JP_TiempoLayout);
+        JP_TiempoLayout.setHorizontalGroup(
+            JP_TiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JP_TiempoLayout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(JP_TiempoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_hrs, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_mins, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_segs, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
+        );
+        JP_TiempoLayout.setVerticalGroup(
+            JP_TiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JP_TiempoLayout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(JP_TiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_mins, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_segs, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_hrs, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        Jmn_terminarJuego.setText("Opciones");
+
+        mnItem_salirYGuardar.setText("Salir y Guardar");
+        mnItem_salirYGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnItem_salirYGuardarActionPerformed(evt);
+            }
+        });
+        Jmn_terminarJuego.add(mnItem_salirYGuardar);
+
+        mnItem_salirSinGuardar.setText("Salir (sin guardar)");
+        mnItem_salirSinGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnItem_salirSinGuardarActionPerformed(evt);
+            }
+        });
+        Jmn_terminarJuego.add(mnItem_salirSinGuardar);
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("Terminar juego");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        Jmn_terminarJuego.add(jCheckBoxMenuItem1);
+
+        jMenuBar1.add(Jmn_terminarJuego);
+
+        jMenu2.setText("Información");
+
+        menu_informativo.setText("infoRestricciones");
+        menu_informativo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menu_informativoMouseClicked(evt);
+            }
+        });
+        jMenu2.add(menu_informativo);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JP_Jugadores, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JP_Tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Turno_JP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Dados_JP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(JP_Tablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(JP_Jugadores, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Turno_JP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Dados_JP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JP_Tiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(JP_Tablero, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_TerminarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TerminarTurnoActionPerformed
+        partida.establecerTurno();
+        dialogoMisPoseciones.recibirTurnoActual(partida.obtenerTurnoActual()-1);
+        while(partida.tieneRestricciones()){//pues no le interesa cuales sino solamente que tenga para poder seguir buscando
+            partida.reducirRestricciones();
+            partida.establecerTurno();//para seguir con el siguiente, recuerda que en el caso de bancaroota, simplemente se lo salta, y tb recuerda que el btn de 
+            asignarJugadoresATablaDeTurnos(SolicitudDatos.registroDatos.darJugadoresEnPartida().length);
+         //lanzar dados, no debe estar revisando a quien permitir y a quién no, puesto que está diseñado paraaccionar sin cuestionamientos, puede nformar, acerca
+         //de lso sucesos como coin o el hecho de que no posea dinerp, pero no actuar de tal manera que rxn de forma tal que se pueda solucionar esto
+        }        
+        
+        partida.mostrarTurno();
+        btn_Dados.setEnabled(true);
+        btn_MIsPoseciones.setEnabled(true);
+        btn_Quiebra.setEnabled(false);//es que no me parece correcto que se active
+        btn_TerminarTurno.setEnabled(false);   
+        partida.reestablecerCoincidencias();
+    }//GEN-LAST:event_btn_TerminarTurnoActionPerformed
+
+    private void btn_MIsPosecionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MIsPosecionesActionPerformed
+        //MIsPoseciones misPoseciones = new MIsPoseciones(new javax.swing.JFrame(), true);
+        //misPoseciones.setVisible(true);
+        dialogoMisPoseciones.limpiarListados();
+        dialogoMisPoseciones.establecerDatosDeListaSubgrupos();
+        dialogoMisPoseciones.setVisible(true);        
+        
+    }//GEN-LAST:event_btn_MIsPosecionesActionPerformed
+
+    private void btn_QuiebraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_QuiebraActionPerformed
+        //se manda a llamar al método que completa la quiebra, haciendo la var de jugador en quibra true, quitandole los dueños a las propiedades y en el caso de los 
+        //lugares haciendo sus cntrcc ==0 y si estaban hipotecadas entonces volviendolas false y al jugador haciendo su salfdo =0 
+                
+        //asignarJugadoresATablaDeTurnos( partida.enviarJugadores().length);
+        int sinQuiebra=0;
+        int jugadorSinQuiebra=0;
+        
+        DesarrolloPartida.jugadores[partida.obtenerTurnoActual()-1].declararseEnBancarrota();//Ese método hay que arreglarlo creo que es por el listado de lugares xD
+        actualizarDatosTablaTurno();//si pues nada mas debe refrescar lo sucedido
+        for (int jugador = 0; jugador < DesarrolloPartida.jugadores.length; jugador++) {
+            if(!DesarrolloPartida.jugadores[partida.obtenerTurnoActual()-1].estaEnBancarrota()){
+                sinQuiebra++;
+                jugadorSinQuiebra=jugador;
+            }
+        }
+        
+        if(sinQuiebra==1){
+            //el diálogo para el jugador sin quiebra            
+            DesarrolloPartida.encontrarGanador(DesarrolloPartida.jugadores[jugadorSinQuiebra]);       
+            menuFinal.setLocationRelativeTo(null);
+            menuFinal.setVisible(true);
+            controlarVentana();
+        }
+        
+    }//GEN-LAST:event_btn_QuiebraActionPerformed
+
+    private void btn_DadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DadosActionPerformed
+        if(btn_Dados.getText().equalsIgnoreCase("Empezar partida")){
+            
+            
+            empezarTiempoSolicitado();
+            partida.mostrarTurno();//pues si.. ya que se exe sin importar que se haya guardado antes de empezar o al empezar con normalidad xD
+            btn_Dados.setText("Dados");
+        }
+
+        dialogoLanzaDados.reestablecerDialogo();
+        dialogoLanzaDados.setLocationRelativeTo(null);
+        dialogoLanzaDados.setVisible(true);                
+            /*partida.determinarTrayecto();//Se lanzan los dados y se halla la suma*///ya no, esto fue seccionado                   
+           
+               if(partida.encontrarCoincidencias()==0){
+                    partida.jugar(partida.encontrarSUmaDados());
+                    btn_Dados.setEnabled(false);
+                    btn_MIsPoseciones.setEnabled(true);
+                    btn_Quiebra.setEnabled(false);
+                    btn_TerminarTurno.setEnabled(true);                        
+                     //quí reestablezco la suma
+                     partida.reestablecerSumaDados();
+                     partida.reestablecerCoincidencias();//aquneu esto ya se hace en el btn de terminar turno...lo cual resulta ser mejor              
+               }else{
+                   if(partida.encontrarCoincidencias()<3){
+                        if(partida.tieneRestricciones()){
+                                btn_Dados.setEnabled(false);
+                                btn_MIsPoseciones.setEnabled(false);//pues perdió el turno y eso tb implica el revisar sus poseciones
+                                btn_Quiebra.setEnabled(true);
+                                btn_TerminarTurno.setEnabled(true);          
+                                //quí reestablezco la suma
+                                partida.reestablecerSumaDados();
+                          }else{
+                              JOptionPane.showMessageDialog(null, "Vaya que suerte... despues de esta puedes volver a lanzar los dados", "Suertudo", JOptionPane.INFORMATION_MESSAGE);                        
+                                partida.jugar(partida.encontrarSUmaDados());//vamos a hacer algo, a los métodos se les llamará con dde forma directa y no global, es que tengo la sospecha de que se haya la suma y se lanzan los dados en el mismo momento, por ello no encuentra nada el lbl al intentar hallar la suma
+                                //actualizarDatosTablaTurno();//sino tb hubieras podido crear un arr aquí y acceder a él de una vez, como lo = al que genera la partida, etnocnes tendría los datos correctos del momento correcto                                
+                                btn_Dados.setEnabled(true);
+                                btn_MIsPoseciones.setEnabled(true);
+                                btn_Quiebra.setEnabled(true);
+                                btn_TerminarTurno.setEnabled(false);                        
+                          }
+                   }else{//hay 3
+                         JOptionPane.showMessageDialog(null, "Por intentar pasarse de listo VAYA A LA CÁRCEL", "Y fuera...", JOptionPane.ERROR_MESSAGE);
+                           //Aquí reestablezco la suma
+                           partida.reestablecerSumaDados();
+                           partida.reestablecerCoincidencias();
+                           //Aquí se mandará a llamar al jugador, como si fuera una casilla VC, es decir con turnos perdidos=1
+                           //y obviamente hay que cb de jugador, esto podría hacerse de forma automática, llamndo a los métodos que invoca el btn de terminar turno ó podría dejarse así y que el jugador termine el turno para no andar repitiendo código
+                           //bueno, sin importar que dorma, deberás deshabilitar este btn
+                           btn_Dados.setEnabled(false);
+                           btn_MIsPoseciones.setEnabled(false);
+                           btn_Quiebra.setEnabled(false);
+                           btn_TerminarTurno.setEnabled(true);//pues solo eso podría hacer JAJAJA
+                   }
+               }//fin del else cuando sí hay coincidencias
+               
+               if(DesarrolloPartida.jugadores[partida.obtenerTurnoActual()-1].obtenerDinero()<0){//pues sin importar si tuvo o no coincidencias, no debe permitírsele nada más hasta que salde sus deudas, esto quiere decir que el reestablecimiento de las coincidencias, en este caso no debería hacerse puesto que solo fue una pausa mientras pagaba
+                 JOptionPane.showMessageDialog(null, "No se admiten deudores en este juego, por ello, paga tus deudas ó sal de aquí", "Bancarrota?", JOptionPane.WARNING_MESSAGE);
+                   
+                 btn_Dados.setEnabled(false);
+                 btn_MIsPoseciones.setEnabled(true);
+                 btn_Quiebra.setEnabled(true);
+                 btn_TerminarTurno.setEnabled(false);                        
+                 btn_yaPague.setEnabled(true);
+                 //quí reestablezco la suma
+                 partida.reestablecerSumaDados();
+                 //partida.reestablecerCoincidencias();
+            }//puesto que debe jugar para que esto pueda llegar a suceder, por eso no tiene nada que hacer allá arriba antes de jugar...
+               
+           //Aqupi se llama al método que recorre a los juadores para ver si enceuntra a uno que sea ganador [pues solamente uno puede ser] esto para inha los botones
+           for(int numeroJugadores=0; numeroJugadores<DesarrolloPartida.jugadores.length; numeroJugadores++){
+               if(DesarrolloPartida.jugadores[numeroJugadores].darEstadoGanador()){
+                     btn_Dados.setEnabled(false);
+                    btn_MIsPoseciones.setEnabled(true);
+                    btn_Quiebra.setEnabled(true);
+                    btn_TerminarTurno.setEnabled(false);                        
+                    btn_yaPague.setEnabled(true);
+                   dialogoFelicitaciones.recibirNombreJUgador(DesarrolloPartida.jugadores[numeroJugadores].obtnerNombre());
+                   dialogoFelicitaciones.setVisible(true);
+                    
+                    break;                  
+               }//este ciclo será útil para cuando exista un ganador por obtnención de todas las propiedades... a mi parecer esto ya no es útil... pues en el momento en el que se encuentra que uno posee todas las propiedades se exe esto
+           }
+
+           
+    }//GEN-LAST:event_btn_DadosActionPerformed
+
+    private void mnItem_salirSinGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItem_salirSinGuardarActionPerformed
+        if(btn_TerminarTurno.isEnabled()){
+            btn_TerminarTurno.setEnabled(false);
+        }else{
+            btn_Dados.setEnabled(false);
+        }        
+        btn_MIsPoseciones.setEnabled(false);               
+        
+        pararTIempoSOlicitado();
+        DesarrolloPartida.encontrarGanador(null);      
+        this.dispose();//también al hacer esto debería evitarse que pueda presionarse continuar partida en la pantalla principal
+        
+    }//GEN-LAST:event_mnItem_salirSinGuardarActionPerformed
+
+    private void mnItem_salirYGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItem_salirYGuardarActionPerformed
+         pararTIempoSOlicitado();
+         entregarDatosTiempoActuales();
+      
+        
+        //aquí se manda a llamar al método del manejador de archivos para que pueda mandarse a guardar la partida, solo te falta serializar los clases de donde salen los objetos implicados y gaurdar los datos del momento justo en el que se cierra el juego
+        if(btn_Dados.getText().equalsIgnoreCase("Empezar Partida")){
+            SolicitudDatos.registroDatos.establecerLanzamientoDados(1);
+        }else{
+            if(btn_Dados.isEnabled()){
+                    SolicitudDatos.registroDatos.establecerLanzamientoDados(3);
+            }else{
+                    SolicitudDatos.registroDatos.establecerLanzamientoDados(2);
+            }            
+        }
+        
+        archivador.escribirArchivo();
+        
+        for(int jugador=0; jugador<SolicitudDatos.registroDatos.darJugadoresEnPartida().length; jugador++){
+            if(SolicitudDatos.registroDatos.darJugadoresEnPartida()[jugador].darEstadoGanador()){
+                Ranking.anadirAlRanking(1);//aqunque pensándolo bien no debería estar aquí porque media vez ganan alguien se muestra el menu de decision final, en donde
+                Ranking.anadirAlRanking(2);//tb pudo haber sido un for como se hizo en el menú de decisión final xD
+                break;//se le pregunta si desea guardar o no y solo en ese momento en el que decida guardar se alamcenará, puesto que esta ventana se cierra... así que 
+                //Está en vano
+            }
+        }
+        
+        
+        this.dispose();//y como no escondí la ventana del home, entonces "aparecerá" cuando cierre esta        
+        
+    }//GEN-LAST:event_mnItem_salirYGuardarActionPerformed
+
+    private void btn_yaPagueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_yaPagueActionPerformed
+        if(DesarrolloPartida.jugadores[partida.obtenerTurnoActual()-1].obtenerDinero()>=0){//pues lo que importa es que pague mas no que tenga dinero para sí
+            btn_MIsPoseciones.setEnabled(false);//puesto que estos 3 sea el número que tenga de coincidencias, ya no son necesarios para la acción siguiente
+                 btn_Quiebra.setEnabled(false);
+                 btn_yaPague.setEnabled(false);
+            if(partida.encontrarCoincidencias()==0){//pues a 3 nunca llegará, porque si lo hace se va directito a la cárcel porque no tenía nada de deuda                
+                 btn_TerminarTurno.setEnabled(true);                                         
+            }else if(partida.encontrarCoincidencias()==1 || partida.encontrarCoincidencias()==2){//Aqunque creo que no debería poner esto, por el hecho
+           //de que jamás entrará así en 3, porque si llegó a 2 es porque no debía nada y luego de tirar y obtener 3, se va directito a la cárcel... pues si antes de jugar su 2 donde tiene la oportunidad para sacar el 3, cae en deuda, 
+           //entonces no tendrá una 3ra coin sino una 2da, la cual se le deberá permitir jugar, que es justo qlo que aquí se hace, por ello, no debería ponerlo, puesto que solo interesará cuando no tenga, para que de una pase a finalizar 
+           //su turno o cuando tenga de 1 a 2 lo cual le permite hacer otro lanzamiento, eso si si está en su 2da y saca una 3ra de balde saldó la deuda xD jajaja
+                btn_Dados.setEnabled(true);//QUE TIENE QUE VER EL DINERO EN ESTE ELSE... NO DEBERÍA SER COINCIDENCIAS?
+            }//ya que estas dos op estaban deshabilitadas... luego de esto ya procedería todo a la normalidad
+        }else{
+            JOptionPane.showMessageDialog(null, "Yo no miro que ya hayas pagado la deuda", "Fmmm", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_yaPagueActionPerformed
+
+    private void menu_informativoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu_informativoMouseClicked
+//        dialogoInformativo.cargarJugadores();
+        dialogoInformativo.setVisible(true);
+    }//GEN-LAST:event_menu_informativoMouseClicked
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+ public void asignarJugadoresATablaDeTurnos(/*Jugador[] jugadores,*/ int numeroJugadores){//Deberá ser llamado cada vez que los datos se actualicen, como p.ej en el btn aceptar transacción, lo cual implicaría que sí
+     paneles = new JPanel[numeroJugadores];//Debas recibir a partida en ligar de solo los jugadores, pues así tendrás acceso a esta misma instacia del método y podrás hacer lo m... bueno, en realidad no es necesario que sea la mims instancia del método puesto que lo qu importa es lo que recibe y en ese caso, estaría recibiendo a los mismos jugadores, así que... da lo mismo, entonces tendrás que llamarlo en el btn anteriormente mencionado y cada vez que termine de exe el me¿étodo respectivo jugar, además del btn de declararse en bancarrota, por el hecho de que deeberá tacharse su nombre xD, si se puede o sino solo colocarle un color dif ó inhabi ó un msje indicando esto...     
+     
+     for(int numeroJugador=0;  numeroJugador<numeroJugadores; numeroJugador++){
+         paneles[numeroJugador]= new JPanel(null);
+         JLabel labelNombre= new JLabel();
+         JLabel labelDinero= new JLabel();
+         labelNombre.setFont(new Font("Sawasdee", 1, 18));
+         labelNombre.setBounds(10, 15, 150, 30);
+         if((SolicitudDatos.registroDatos.obtenerTurnoActual()-1)==numeroJugador){
+             labelNombre.setText("-> "+(numeroJugador+1)+". "+DesarrolloPartida.jugadores[numeroJugador].obtnerNombre());
+         }else{
+                 labelNombre.setText((numeroJugador+1)+". "+DesarrolloPartida.jugadores[numeroJugador].obtnerNombre());
+         }         
+         
+         labelNombre.setVisible(true);
+         labelDinero.setFont(new Font("Sawasdee", 1, 18));
+         labelDinero.setText("$ "+ DesarrolloPartida.jugadores[numeroJugador].obtenerDinero());
+         labelDinero.setBounds(220, 15, 100, 30);
+         labelDinero.setVisible(true);
+         
+         paneles[numeroJugador].add(labelNombre);
+         paneles[numeroJugador].add(labelDinero);
+         paneles[numeroJugador].setBounds(15, 75*(numeroJugador+1)+(numeroJugador*20), 375, 55);
+         paneles[numeroJugador].setOpaque(true);
+         paneles[numeroJugador].setVisible(true);
+         
+         paneles[numeroJugador].updateUI();
+     }
+     
+     agregarCasillasDeMatrizAContenedor(numeroJugadores);
+     JP_Jugadores.updateUI();
+ }
+ 
+     public void agregarCasillasDeMatrizAContenedor(int numeroJugadores){//esto por el hecho de la edición como en ese caso, el arreglo o la lista tomaría los valores del registro quien obtuvo los datos del archivo, mas no del frontend
+        for (int jugadores = 0; jugadores < numeroJugadores; jugadores++) {          
+                    agregarCasillasAContenedorDeMatriz(jugadores);                             
+          
+        }               
+        JP_Jugadores.updateUI();
+    }
+     
+      public void agregarCasillasAContenedorDeMatriz(int jugadores){        
+        JP_Jugadores.add(paneles[jugadores]);
+        paneles[jugadores].setVisible(true);
+    }
+      
+      
+    public void agregarCasillasDeListaAContenedor(){
+        Nodo<JPanel> nodoActual=listaCasillasFisicas.obtnerPrimerNodo();
+        
+        while(nodoActual.obtenerSiguiente()!=null){
+                agregarCasillasAContenedorDeLista(nodoActual.obtenerObjectcEnCasilla());
+                nodoActual=nodoActual.obtenerSiguiente();//Este al final simpre será null, pero como no mandaré a llamar de él ningún método, entonces no afecta                        
+        }//fin del for              
+         agregarCasillasAContenedorDeLista(nodoActual.obtenerObjectcEnCasilla());//por el hecho de que sino siempre faltaría una casilla, es decir la última porque esta refiere a nada, depués de ella
+        
+            JP_Tablero.updateUI();
+    }   
+      
+     public void agregarCasillasAContenedorDeLista(JPanel casillaAMostrar){                   
+        JP_Tablero.add(casillaAMostrar);
+        casillaAMostrar.setVisible(true);             
+    }
+     
+     public static void actualizarDatosTablaTurno(){//aquí, si después quieres y puedes xD, tienes la oportunidad de ir cb a los jugadores según el turno 
+     //en el que se vaya, teniendo 2 for o algo así, uno que se encargue de llegar a partir de jugador en turno hasta el tope del arr y otro que sea el 
+     //encargado de establecer a los jugadores depués de terminar este 1er for a partir del inicio hasta el tope, como va a iniciar de 0 y suponiendo que
+     //el turno actual  es el del jugador en la posición 0, no habrá problema puesto que este for inicia en 0 y terminar en el número antes del turno en cuestión
+     //[que sería turno-1] por el hecho de que se da en números de usuario xD
+         for(int numeroPaneles=0; numeroPaneles<paneles.length;numeroPaneles++){
+          
+             JLabel labelDinero;
+             labelDinero=(JLabel)paneles[numeroPaneles].getComponent(1);             
+             /*if(numeroPaneles==DesarrolloPartida.numeroTurno){
+                 labelDinero.setFont(new Font("Sawasdee", 2, 18));
+             }*/
+             labelDinero.setText("$ "+String.valueOf(DesarrolloPartida.jugadores[numeroPaneles].obtenerDinero()));
+         }
+         
+     }
+
+
+ public void recibirCasillasFisicas(ListaEnlazada casillas){
+     listaCasillasFisicas=casillas;
+ }
+ 
+ public void crearInstanciaDeTiempoSolicitada(){
+     if(SolicitudDatos.registroDatos.obtnerTIpoTIempo()==1){
+         temporizador = new Temporizador();      
+        
+     }else{
+         reloj = new Reloj();                 
+     }
+ }
+ 
+ public void empezarTiempoSolicitado(){
+     if(SolicitudDatos.registroDatos.obtnerTIpoTIempo()==1){
+         temporizador.empezar();      
+        
+     }else{
+         reloj.empezar();                 
+     }
+ }
+ 
+ public void pararTIempoSOlicitado(){
+     if(SolicitudDatos.registroDatos.obtnerTIpoTIempo()==1){
+         temporizador.pararTemporizador();
+        
+     }else{
+         reloj.pararReloj();
+     }
+ }
+ 
+ public void entregarDatosTiempoActuales(){
+     if(SolicitudDatos.registroDatos.obtnerTIpoTIempo()==1){
+         temporizador.entregarTiempoRestante();
+        
+     }else{
+         reloj.entregarTiempoRestante();
+     }
+ }
+   
+ 
+ public static void controlarVentana(){
+     if(MenuDecisionFinal.informarCierre()){
+         referenciaTablero.dispose();
+     }
+ }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Dados_JP;
+    private javax.swing.JPanel JP_Jugadores;
+    private javax.swing.JPanel JP_Tablero;
+    private javax.swing.JPanel JP_Tiempo;
+    private javax.swing.JPanel JPn_jugador3;
+    private javax.swing.JPanel JPn_jugador4;
+    private javax.swing.JPanel JPn_jugador5;
+    private javax.swing.JPanel JPn_jugador6;
+    private javax.swing.JMenu Jmn_terminarJuego;
+    private javax.swing.JPanel Turno_JP;
+    private javax.swing.JButton btn_Dados;
+    private javax.swing.JButton btn_MIsPoseciones;
+    private javax.swing.JButton btn_Quiebra;
+    private javax.swing.JButton btn_TerminarTurno;
+    private javax.swing.JButton btn_yaPague;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JLabel lbl_hrs;
+    private javax.swing.JLabel lbl_mins;
+    private javax.swing.JLabel lbl_segs;
+    private javax.swing.JMenu menu_informativo;
+    private javax.swing.JMenuItem mnItem_salirSinGuardar;
+    private javax.swing.JMenuItem mnItem_salirYGuardar;
+    // End of variables declaration//GEN-END:variables
+}
